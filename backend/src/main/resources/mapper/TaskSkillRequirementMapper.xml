@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rescue.mapper.TaskSkillRequirementMapper">
+
+    <select id="selectByTaskId" resultType="com.rescue.entity.TaskSkillRequirement">
+        SELECT * FROM task_skill_requirement
+        WHERE task_id = #{taskId}
+        AND deleted = 0
+    </select>
+
+</mapper>

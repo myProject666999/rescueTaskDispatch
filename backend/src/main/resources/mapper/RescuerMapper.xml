@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rescue.mapper.RescuerMapper">
+
+    <select id="selectBySkillIds" resultType="com.rescue.entity.Rescuer">
+        SELECT DISTINCT r.* FROM rescuer r
+        INNER JOIN rescuer_skill rs ON r.id = rs.rescuer_id
+        WHERE rs.skill_id IN
+        <foreach collection="skillIds" item="skillId" open="(" separator="," close=")">
+            #{skillId}
+        </foreach>
+        AND r.availability_status = #{availabilityStatus}
+        AND r.deleted = 0
+        AND rs.deleted = 0
+        ORDER BY r.id
+    </select>
+
+</mapper>
