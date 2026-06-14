@@ -28,6 +28,9 @@ export const updateTaskRescuerStatus = (id, status) => request.put(`/task-rescue
 export const getTaskRescuers = (taskId) => request.get(`/task-rescuers/task/${taskId}`);
 
 export const getEquipmentPage = (params) => request.get('/equipments/page', { params });
+export const addEquipment = (data) => request.post('/equipments', data);
+export const updateEquipment = (data) => request.put('/equipments', data);
+export const deleteEquipment = (id) => request.delete(`/equipments/${id}`);
 export const checkoutEquipment = (params) => request.post('/equipments/checkout', null, { params });
 export const returnEquipment = (id) => request.post(`/equipments/return/${id}`);
 export const getTaskEquipments = (taskId) => request.get(`/equipments/task/${taskId}`);

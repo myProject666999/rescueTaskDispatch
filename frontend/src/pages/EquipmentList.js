@@ -17,7 +17,7 @@ import {
   Progress,
 } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { getEquipmentPage } from '../services/api';
+import { getEquipmentPage, addEquipment, updateEquipment, deleteEquipment } from '../services/api';
 import { EQUIPMENT_CATEGORIES } from '../constants';
 
 const categoryColorMap = {
@@ -80,6 +80,25 @@ export default function EquipmentList() {
     setModalVisible(true);
   };
 
+  const handleSubmit = async () => {
+    const values = await form.validateFields();
+    if (current) {
+      await updateEquipment({ ...values, id: current.id });
+      message.success('已更新');
+    } else {
+      await addEquipment(values);
+      message.success('已新增');
+    }
+    setModalVisible(false);
+    loadList();
+  };
+
+  const handleDelete = async (id) => {
+    await deleteEquipment(id);
+    message.success('删除成功');
+    loadList();
+  };
+
   const columns = [
     { title: '装备编号', dataIndex: 'equipCode', width: 140 },
     { title: '装备名称', dataIndex: 'equipName', width: 160 },
@@ -118,7 +137,7 @@ export default function EquipmentList() {
           <Button size="small" type="link" onClick={() => openEdit(r)}>
             编辑
           </Button>
-          <Popconfirm title="确认删除?" onConfirm={() => message.info('删除功能')}>
+          <Popconfirm title="确认删除?" onConfirm={() => handleDelete(r.id)}>
             <Button size="small" type="link" danger>
               删除
             </Button>
@@ -180,12 +199,7 @@ export default function EquipmentList() {
         title={current ? '编辑装备' : '新增装备'}
         open={modalVisible}
         onCancel={() => setModalVisible(false)}
-        onOk={async () => {
-          const values = await form.validateFields();
-          message.success(current ? '已更新' : '已新增');
-          setModalVisible(false);
-          loadList();
-        }}
+        onOk={handleSubmit}
         destroyOnClose
       >
         <Form form={form} layout="vertical">
