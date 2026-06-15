@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import {
   Table,
   Button,
@@ -98,18 +99,22 @@ export default function RescuerList() {
     setCurrentRescuer(record);
     form.setFieldsValue({
       ...record,
-      joinDate: record.joinDate ? record.joinDate.split(' ')[0] : null,
+      joinDate: record.joinDate ? dayjs(record.joinDate.split(' ')[0]) : null,
     });
     setModalVisible(true);
   };
 
   const handleSubmit = async () => {
     const values = await form.validateFields();
+    const submitData = {
+      ...values,
+      joinDate: values.joinDate ? values.joinDate.format('YYYY-MM-DD') : null,
+    };
     if (currentRescuer) {
-      await updateRescuer({ ...values, id: currentRescuer.id });
+      await updateRescuer({ ...submitData, id: currentRescuer.id });
       message.success('更新成功');
     } else {
-      await addRescuer(values);
+      await addRescuer(submitData);
       message.success('添加成功');
     }
     setModalVisible(false);

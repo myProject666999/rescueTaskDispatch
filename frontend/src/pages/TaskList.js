@@ -106,7 +106,14 @@ export default function TaskList() {
 
   const handleCreate = async () => {
     const values = await form.validateFields();
-    const skillIds = (values.skillIds || []).map((arr) => arr[arr.length - 1]).filter(Boolean);
+    const rawSkillIds = values.skillIds || [];
+    const skillIds = rawSkillIds.map((item) => {
+      if (Array.isArray(item)) {
+        const lastVal = item[item.length - 1];
+        return Number(lastVal);
+      }
+      return Number(item);
+    }).filter((v) => !isNaN(v) && v > 0);
     await createTask({ ...values, skillIds });
     message.success('任务创建成功');
     setModalVisible(false);
